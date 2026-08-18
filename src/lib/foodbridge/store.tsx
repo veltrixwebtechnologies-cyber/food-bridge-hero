@@ -210,9 +210,11 @@ export function FoodBridgeProvider({ children }: { children: ReactNode }) {
       updateDonationStatus(id, status, ngoId) {
         setState((s) => ({
           ...s,
-          donations: s.donations.map((d) =>
+          donations: s.donations.map((d): Donation =>
             d.donationId === id
-              ? { ...d, status, matchedNgoId: ngoId ?? d.matchedNgoId }
+              ? ngoId ?? d.matchedNgoId
+                ? { ...d, status, matchedNgoId: (ngoId ?? d.matchedNgoId) as string }
+                : { ...d, status }
               : d,
           ),
         }));
