@@ -70,7 +70,25 @@ const schema = z.object({
 const CATEGORIES = ["Cooked Meals", "Buffet Surplus", "Packed Food", "Bakery", "Raw Groceries", "Fruits & Vegetables"];
 const DONOR_TYPES: DonorType[] = ["Restaurant", "Hotel", "Event Hall", "Canteen", "Household", "Caterer"];
 
-const initialForm = {
+type FormState = {
+  donorName: string;
+  organization: string;
+  phone: string;
+  email: string;
+  foodType: string;
+  category: string;
+  diet: string;
+  donorType: string;
+  quantity: string;
+  servings: string;
+  preparedAt: string;
+  bestBefore: string;
+  address: string;
+  availableTime: string;
+  description: string;
+};
+
+const initialForm: FormState = {
   donorName: "",
   organization: "",
   phone: "",
@@ -90,7 +108,7 @@ const initialForm = {
 
 function DonatePage() {
   const { addDonation, ngos, userLocation, setUserLocation, currentUser } = useStore();
-  const [form, setForm] = useState<Record<string, string>>({
+  const [form, setForm] = useState<FormState>({
     ...initialForm,
     donorName: currentUser?.name ?? "",
     organization: currentUser?.organization ?? "",
@@ -98,13 +116,13 @@ function DonatePage() {
     email: currentUser?.email ?? "",
     address: currentUser?.location ?? "",
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [confirmed, setConfirmed] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [locating, setLocating] = useState(false);
   const [created, setCreated] = useState<Donation | null>(null);
 
-  const set = (key: string, value: string) => {
+  const set = (key: keyof FormState, value: string) => {
     setForm((f) => ({ ...f, [key]: value }));
     setErrors((e) => ({ ...e, [key]: "" }));
   };
@@ -144,9 +162,9 @@ function DonatePage() {
     e.preventDefault();
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
-      const fieldErrors: Record<string, string> = {};
+      const fieldErrors: Partial<Record<keyof FormState, string>> = {};
       for (const issue of parsed.error.issues) {
-        fieldErrors[String(issue.path[0])] = issue.message;
+        fieldErrors[String(issue.path[0]) as keyof FormState] = issue.message;
       }
       setErrors(fieldErrors);
       toast.error("Invalid form", { description: "Please fix the highlighted fields." });
@@ -214,20 +232,20 @@ function DonatePage() {
       <form onSubmit={submit} className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Section title="Donor details">
-            <Field label="Donor Name" error={errors["donorName"]}>
-              <Input value={form["donorName"]} onChange={(e) => set("donorName", e.target.value)} placeholder="Aarav Mehta" />
+            <Field label="Donor Name" error={errors.donorName}>
+              <Input value={form.donorName} onChange={(e) => set("donorName", e.target.value)} placeholder="Aarav Mehta" />
             </Field>
-            <Field label="Organization / Restaurant / Hotel Name" error={errors["organization"]}>
-              <Input value={form["organization"]} onChange={(e) => set("organization", e.target.value)} placeholder="Spice Garden Restaurant" />
+            <Field label="Organization / Restaurant / Hotel Name" error={errors.organization}>
+              <Input value={form.organization} onChange={(e) => set("organization", e.target.value)} placeholder="Spice Garden Restaurant" />
             </Field>
-            <Field label="Phone Number" error={errors["phone"]}>
-              <Input value={form["phone"]} onChange={(e) => set("phone", e.target.value)} placeholder="+91 98200 11223" />
+            <Field label="Phone Number" error={errors.phone}>
+              <Input value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="+91 98200 11223" />
             </Field>
-            <Field label="Email" error={errors["email"]}>
-              <Input type="email" value={form["email"]} onChange={(e) => set("email", e.target.value)} placeholder="you@example.com" />
+            <Field label="Email" error={errors.email}>
+              <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="you@example.com" />
             </Field>
-            <Field label="Donor Type" error={errors["donorType"]}>
-              <Select value={form["donorType"]} onValueChange={(v) => set("donorType", v)}>
+            <Field label="Donor Type" error={errors.donorType}>
+              <Select value={form.donorType} onValueChange={(v) => set("donorType", v)}>
                 <SelectTrigger><SelectValue placeholder="Select donor type" /></SelectTrigger>
                 <SelectContent>
                   {DONOR_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
@@ -237,19 +255,19 @@ function DonatePage() {
           </Section>
 
           <Section title="Food details">
-            <Field label="Food Type" error={errors["foodType"]}>
-              <Input value={form["foodType"]} onChange={(e) => set("foodType", e.target.value)} placeholder="Veg Thali (rice, dal, sabzi, roti)" />
+            <Field label="Food Type" error={errors.foodType}>
+              <Input value={form.foodType} onChange={(e) => set("foodType", e.target.value)} placeholder="Veg Thali (rice, dal, sabzi, roti)" />
             </Field>
-            <Field label="Food Category" error={errors["category"]}>
-              <Select value={form["category"]} onValueChange={(v) => set("category", v)}>
+            <Field label="Food Category" error={errors.category}>
+              <Select value={form.category} onValueChange={(v) => set("category", v)}>
                 <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
                 <SelectContent>
                   {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                 </SelectContent>
               </Select>
             </Field>
-            <Field label="Vegetarian / Non-Vegetarian" error={errors["diet"]}>
-              <Select value={form["diet"]} onValueChange={(v) => set("diet", v)}>
+            <Field label="Vegetarian / Non-Vegetarian" error={errors.diet}>
+              <Select value={form.diet} onValueChange={(v) => set("diet", v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Vegetarian">Vegetarian</SelectItem>
@@ -258,32 +276,32 @@ function DonatePage() {
                 </SelectContent>
               </Select>
             </Field>
-            <Field label="Quantity" error={errors["quantity"]}>
-              <Input value={form["quantity"]} onChange={(e) => set("quantity", e.target.value)} placeholder="12 trays" />
+            <Field label="Quantity" error={errors.quantity}>
+              <Input value={form.quantity} onChange={(e) => set("quantity", e.target.value)} placeholder="12 trays" />
             </Field>
-            <Field label="Number of Servings" error={errors["servings"]}>
-              <Input type="number" min={1} value={form["servings"]} onChange={(e) => set("servings", e.target.value)} placeholder="120" />
+            <Field label="Number of Servings" error={errors.servings}>
+              <Input type="number" min={1} value={form.servings} onChange={(e) => set("servings", e.target.value)} placeholder="120" />
             </Field>
-            <Field label="Food Preparation Time" error={errors["preparedAt"]}>
-              <Input type="time" value={form["preparedAt"]} onChange={(e) => set("preparedAt", e.target.value)} />
+            <Field label="Food Preparation Time" error={errors.preparedAt}>
+              <Input type="time" value={form.preparedAt} onChange={(e) => set("preparedAt", e.target.value)} />
             </Field>
-            <Field label="Best Before Time" error={errors["bestBefore"]}>
-              <Input type="time" value={form["bestBefore"]} onChange={(e) => set("bestBefore", e.target.value)} />
+            <Field label="Best Before Time" error={errors.bestBefore}>
+              <Input type="time" value={form.bestBefore} onChange={(e) => set("bestBefore", e.target.value)} />
             </Field>
           </Section>
 
           <Section title="Pickup details">
-            <Field label="Pickup Address" error={errors["address"]} full>
-              <Input value={form["address"]} onChange={(e) => set("address", e.target.value)} placeholder="Spice Garden, Kalyani Nagar, Pune" />
+            <Field label="Pickup Address" error={errors.address} full>
+              <Input value={form.address} onChange={(e) => set("address", e.target.value)} placeholder="Spice Garden, Kalyani Nagar, Pune" />
             </Field>
             <Field label="Current Location (detected)">
               <Input readOnly value={`${userLocation.label} · ${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`} />
             </Field>
-            <Field label="Available Pickup Time" error={errors["availableTime"]}>
-              <Input value={form["availableTime"]} onChange={(e) => set("availableTime", e.target.value)} placeholder="Now – 9:30 PM" />
+            <Field label="Available Pickup Time" error={errors.availableTime}>
+              <Input value={form.availableTime} onChange={(e) => set("availableTime", e.target.value)} placeholder="Now – 9:30 PM" />
             </Field>
-            <Field label="Food Description" error={errors["description"]} full>
-              <Textarea rows={3} value={form["description"]} onChange={(e) => set("description", e.target.value)} placeholder="Packed and sealed in food-grade trays, prepared for a corporate lunch." />
+            <Field label="Food Description" error={errors.description} full>
+              <Textarea rows={3} value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Packed and sealed in food-grade trays, prepared for a corporate lunch." />
             </Field>
             <Field label="Upload Food Image" full>
               <div className="flex flex-wrap items-center gap-3">
@@ -384,9 +402,9 @@ function Field({
   full,
 }: {
   label: string;
-  error?: string;
+  error?: string | undefined;
   children: React.ReactNode;
-  full?: boolean;
+  full?: boolean | undefined;
 }) {
   return (
     <div className={full ? "sm:col-span-2" : undefined}>
