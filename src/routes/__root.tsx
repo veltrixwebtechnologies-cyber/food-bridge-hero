@@ -81,20 +81,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "FoodBridge — Smart Food Donation Network" },
+      { title: "FoodBridge — Turn Surplus Food Into Hope" },
       {
         name: "description",
         content:
-          "FoodBridge connects surplus food with nearby NGOs and communities in real time. Save Food. Share Hope.",
+          "FoodBridge connects surplus food from restaurants, hotels and households with nearby NGOs in real time using smart location-based matching.",
       },
       { name: "author", content: "FoodBridge" },
-      { property: "og:title", content: "FoodBridge — Smart Food Donation Network" },
+      { property: "og:title", content: "FoodBridge — Turn Surplus Food Into Hope" },
       {
         property: "og:description",
-        content: "Save Food. Share Hope. Build a Hunger-Free Community.",
+        content: "FoodBridge connects surplus food from restaurants, hotels and households with nearby NGOs in real time using smart location-based matching.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "FoodBridge — Turn Surplus Food Into Hope" },
+      { name: "twitter:description", content: "FoodBridge connects surplus food from restaurants, hotels and households with nearby NGOs in real time using smart location-based matching." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e57bd6513585b8e8ba68704c62e67f3b/id-preview-346318c4--e8b24783-42f1-496a-b3c1-3f08e70136ed.lovable.app-1787017275067.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e57bd6513585b8e8ba68704c62e67f3b/id-preview-346318c4--e8b24783-42f1-496a-b3c1-3f08e70136ed.lovable.app-1787017275067.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

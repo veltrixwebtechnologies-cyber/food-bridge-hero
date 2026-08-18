@@ -35,7 +35,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Real-time, location-based smart matching of surplus food with nearby NGOs and food banks.",
+          "FoodBridge connects surplus food from restaurants, hotels and households with nearby NGOs in real time using smart location-based matching.",
       },
     ],
   }),
