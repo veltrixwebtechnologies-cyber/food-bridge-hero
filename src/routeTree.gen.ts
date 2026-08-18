@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as DonateRouteImport } from './routes/donate'
+import { Route as FindFoodRouteImport } from './routes/find-food'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as LiveDonationsRouteImport } from './routes/live-donations'
+import { Route as MapRouteImport } from './routes/map'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,6 +31,11 @@ const AboutRoute = AboutRouteImport.update({
 const DonateRoute = DonateRouteImport.update({
   id: '/donate',
   path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindFoodRoute = FindFoodRouteImport.update({
+  id: '/find-food',
+  path: '/find-food',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -46,56 +53,85 @@ const LiveDonationsRoute = LiveDonationsRouteImport.update({
   path: '/live-donations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/donate': typeof DonateRoute
+  '/find-food': typeof FindFoodRoute
   '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
   '/live-donations': typeof LiveDonationsRoute
+  '/map': typeof MapRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/donate': typeof DonateRoute
+  '/find-food': typeof FindFoodRoute
   '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
   '/live-donations': typeof LiveDonationsRoute
+  '/map': typeof MapRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/donate': typeof DonateRoute
+  '/find-food': typeof FindFoodRoute
   '/how-it-works': typeof HowItWorksRoute
   '/impact': typeof ImpactRoute
   '/live-donations': typeof LiveDonationsRoute
+  '/map': typeof MapRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/about' | '/donate' | '/how-it-works' | '/impact' | '/live-donations'
+    | '/'
+    | '/about'
+    | '/donate'
+    | '/find-food'
+    | '/how-it-works'
+    | '/impact'
+    | '/live-donations'
+    | '/map'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/about' | '/donate' | '/how-it-works' | '/impact' | '/live-donations'
+    | '/'
+    | '/about'
+    | '/donate'
+    | '/find-food'
+    | '/how-it-works'
+    | '/impact'
+    | '/live-donations'
+    | '/map'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/donate'
+    | '/find-food'
     | '/how-it-works'
     | '/impact'
     | '/live-donations'
+    | '/map'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   DonateRoute: typeof DonateRoute
+  FindFoodRoute: typeof FindFoodRoute
   HowItWorksRoute: typeof HowItWorksRoute
   ImpactRoute: typeof ImpactRoute
   LiveDonationsRoute: typeof LiveDonationsRoute
+  MapRoute: typeof MapRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -121,6 +157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DonateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/find-food': {
+      id: '/find-food'
+      path: '/find-food'
+      fullPath: '/find-food'
+      preLoaderRoute: typeof FindFoodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/how-it-works': {
       id: '/how-it-works'
       path: '/how-it-works'
@@ -142,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LiveDonationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -149,9 +199,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   DonateRoute: DonateRoute,
+  FindFoodRoute: FindFoodRoute,
   HowItWorksRoute: HowItWorksRoute,
   ImpactRoute: ImpactRoute,
   LiveDonationsRoute: LiveDonationsRoute,
+  MapRoute: MapRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

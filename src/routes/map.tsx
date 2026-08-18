@@ -113,7 +113,10 @@ function MapPage() {
           <Button
             variant="secondary"
             onClick={() => {
-              if (!nearestNgo) return toast.error("No suitable NGO found nearby.");
+              if (!nearestNgo) {
+                toast.error("No suitable NGO found nearby.");
+                return;
+              }
               setFocus({ lat: nearestNgo.n.lat, lng: nearestNgo.n.lng });
               setSelected({ kind: "ngo", id: nearestNgo.n.id });
               toast.success(`Nearest NGO: ${nearestNgo.n.name}`, {
@@ -125,7 +128,10 @@ function MapPage() {
           </Button>
           <Button
             onClick={() => {
-              if (!nearestDonation) return toast.error("No active food donations found nearby.");
+              if (!nearestDonation) {
+                toast.error("No active food donations found nearby.");
+                return;
+              }
               setFocus({ lat: nearestDonation.x.lat, lng: nearestDonation.x.lng });
               setSelected({ kind: "donation", id: nearestDonation.x.donationId });
               toast.success(`Nearest donation: ${nearestDonation.x.organization}`, {
