@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import "leaflet/dist/leaflet.css";
 import type { Donation, Ngo } from "@/lib/foodbridge/types";
 
 /**
@@ -34,7 +35,6 @@ export function FoodMap({ donations, ngos, center, focus, onSelect }: FoodMapPro
     let cancelled = false;
     (async () => {
       const L = (await import("leaflet")).default;
-      await import("leaflet/dist/leaflet.css");
       if (cancelled || !containerRef.current || mapRef.current) return;
 
       const map = L.map(containerRef.current, { scrollWheelZoom: false }).setView(

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Building2, Crosshair, Loader2, Navigation, Utensils } from "lucide-react";
-import { lazy, Suspense, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { PageShell } from "@/components/site/PageShell";
 import { StatusBadge } from "@/components/site/StatusBadge";
@@ -40,8 +40,8 @@ function MapPage() {
   const [locating, setLocating] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Only render the map on the client.
-  if (typeof window !== "undefined" && !mounted) setTimeout(() => setMounted(true), 0);
+  // Only render the map on the client (Leaflet touches window/document).
+  useEffect(() => setMounted(true), []);
 
   const activeDonations = useMemo(
     () => donations.filter((d) => !["cancelled", "completed"].includes(d.status)),
